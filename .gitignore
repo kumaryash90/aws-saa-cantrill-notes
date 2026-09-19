@@ -1,0 +1,15 @@
+# Credentials
+*.pem
+*.key
+*.csv
+accessKeys*
+*_accessKeys*
+.env
+credentials
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
