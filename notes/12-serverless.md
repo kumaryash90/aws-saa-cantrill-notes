@@ -113,3 +113,115 @@
 - cold start and warm start
 
 ***todo: diagram***
+
+## Cloudwatch Events and EventBridge
+
+***todo: diagram***
+
+- a way to implement event-driven architecture in aws
+- EventBridge is superset, newer service, aws promoting this and perhaps deprecating cw events
+- both have same underlying architecture and similar functions
+- what they do:
+    - monitor event bus → pattern match / schedule match events → deliver to targets
+- 1 default event bus per account (with EventBridge, you can create more)
+
+## SNS
+
+***todo: diagram***
+
+- it's a public zone service, ha and scalable
+- pub-sub architecture
+- publishers publish messages to TOPICS, and subscribers receive those
+- subscribers can be — https(s), SQS queues, lambda functions, etc.
+- services can be publishers and subscribers at the same time, e.g. API
+- can apply filter for subscribers
+- msg size ≤ 256kb
+- topics have topic policy — cross-account access
+- has server side encryption
+- delivery status, delivery retries
+
+## Step Functions
+
+- to address some limitations (design-decisions) of lambda
+- lets you create serverless workflows (state-machines)
+    - e.g. long running orderflow on amazon etc.
+- max execution duration is 1 year
+- workflow types: standard (1 yr) and express (highly transactional stuff, 5 mins)
+- started via API gateway, event bridge, lambda, manually etc
+- ASL (amazon states language) - json template
+- type of states:
+    - succeed & fail
+    - wait (pauses the workflow for a given duration)
+    - choice
+    - parallel
+    - map
+    - task (single unit of work/action) — invokes services like lambda, etc.
+
+## API Gateway
+
+***todo: diagram***
+
+- service to create and manage APIs
+- sits between applications and integrations
+- ha and scalable, handles auth, throttling, caching, cors, transformations, openAPI spec, direct integration with aws services, etc.
+- public zone service
+- http, rest, websocket apis
+- req and res phases
+- also integrates with cloudwatch
+- types of auth methods supported:
+    - cognito
+    - lambda based auth (custom) — used for external id providers
+- endpoint types
+    - edge optimized — routed to nearest cloudfront pop
+    - regional
+    - private — within vpc
+- stages: apis are deployed to stages. each stage has one deployment.
+    - dev, prod
+    - can have versions
+    - stages can be enabled for canary deployments
+- errors
+    - 4xx — client errors
+        - 400 - bad request
+        - 403 - access denied
+        - 429 - throttled
+    - 5xx — server / backend errors
+        - 502 - bad gateway
+        - 503 - service unavailable
+        - 504 - integration failure / timeout (29 seconds)
+- caching — configured per stage
+    - ttl default 300 seconds, min 0 and max 3600 seconds
+    - can be encrypted
+    - cache size 500 mb to 237 gb
+
+## SQS
+
+- public zone
+- fully managed, ha
+- two types: standard (best effort) or fifo (order)
+    - standard ⇒ multi-lane highway ⇒ guarantees at-least-once delivery, but not order
+        - very high perf, crazy scalable (nearly unlimited TPS)
+    - fifo ⇒ single lane road ⇒ guarantees order and exactly-once delivery
+        - low performance, 300 TPS without batching, 3000 with batching
+        - must have ".fifo" suffix
+- msg size ≤ 256kb, can link to large data
+- received msgs are hidden (visibility timeout)
+    - will get deleted by client or reappear in the queue
+- dead-letter queues for problem msgs
+- asg and lambda can work based on queue length
+- **v v imp** — fanout architecture (e.g. multiple sqs subscribed to sns topic for master video upload, msg added to each queue, allowing multiple processing jobs to be started per object upload)
+- billing based on requests — 1 request = 1-10 msgs upto 64kb total
+    - long polling vs short polling
+- encryption at rest (kms) and in transit
+- identity policies and queue policies
+
+## SQS Delay Queues
+
+- initial period of invisibility for messages — no processing
+    - 0 to 15 min delay
+- not supported on fifo queues
+
+## SQS Dead Letter Queues
+
+- for problematic messages (processing failing repeatedly in main queue)
+- different processing, diagnostic, logging methods can be used to identify faults
+- retention period is generally longer than source queues, takes into account the enqueue timestamp isn't changed
