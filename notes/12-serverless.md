@@ -225,3 +225,116 @@
 - for problematic messages (processing failing repeatedly in main queue)
 - different processing, diagnostic, logging methods can be used to identify faults
 - retention period is generally longer than source queues, takes into account the enqueue timestamp isn't changed
+
+## Kinesis Data Streams
+
+- scalable streaming service, designed to ingest **huge amounts of data** from various devices/apps
+- public, ha, realtime (~200 ms)
+- storage is included, default 24 hr moving window of data, can be extended to max 365 days
+- great for analytics and dashboards
+- producers → stream → consumers
+    - stream has shard architecture for scaling, starts with 1 shard
+    - each shard has 1mb/sec ingestion, and 2mb/sec for consumption
+- data is stored as kinesis data records, 1mb each in size
+- data can be moved to s3 for longterm, using kinesis firehose
+- sqs vs kinesis
+    - (for exam - if question is related to ingestion, it's kinesis. for other cases, answer is generally sqs)
+    - sqs - 1 production group, 1 consumer group
+        - generally used for decoupling
+        - doesn't provide persistence
+    - kinesis is designed for huge scale ingestion
+        - multiple consumers, different rates for each
+
+## Kinesis Data Firehose
+
+- fully managed service, persistence beyond rolling window period
+- auto scaling, serverless, resilient, **near-realtime** (~60 sec delay)
+- supports data transformation using lambda
+- pay-as-you-go
+- valid destinations for data delivery:
+    - http endpoints (third party providers)
+    - splunk
+    - redshift
+    - s3
+    - elastic search
+- can receive either from kinesis stream, or from producers directly
+- buffer of 60 sec or 1mb size
+
+## Kinesis Data Analytics
+
+***todo: diagram***
+
+- realtime data processing product
+- using SQL
+- ingests from kinesis data streams or firehose
+- supported destinations
+    - firehose destinations (near-realtime)
+    - lambda (realtime)
+    - kinesis data streams (realtime)
+- usecases - streaming data that needs realtime sql processing
+    - real-time dashboards (game learderboards)
+    - time-series analytics (elections/e-sports)
+    - real-time metrics (security & response teams)
+
+## Kinesis Video Streams
+
+***todo: diagram***
+
+- ingest live video data from producers
+    - security cameras
+    - drones
+    - cars
+    - smartphones
+    - radar
+    - etc
+- consumers can access data frame-by-frame
+- can persist and encrypt data
+- **can't access directly via storage. only via APIs.**
+- integration with aws services like Rekognition and Connect
+
+## Amazon Cognito — User and Identity Pools
+
+- authentication, authorization, and user mgmt for web/mobile apps
+- user pool — sign-in and get JWT
+
+    ***todo: diagram***
+
+    - can't be used for directly accessing aws
+    - just offers a joined-up user mgmt system for sign-in/sign-up
+- identity pool — access to temp aws credentials (iam role)
+
+    ***todo: diagram***
+
+    - guest users
+    - swap external identites for temp aws cred (e.g. google login, **user pool**)
+- user and identity pools can be used together
+
+    ***todo: diagram***
+
+## AWS Glue
+
+- serverless ETL (extract-transform-load) system
+    - vs datapipeline, that uses EC2 and EMR
+- can also crawl, generate glue catalog
+    - catalog ⇒ persistent metadata about data sources
+    - one catalog per region per account
+    - avoids data silos
+
+## Amazon MQ 101
+
+- kinda like a merge of sns and sqs (but with open source)
+- for migrating on-premise msg/queue systems that aren't using aws sqs/sns
+- message broker servers, based on managed Apache ActiveMQ
+- apis such as JMS, or protocols such as AMQP, MQTT, OpenWire, STOMP
+- vpc based, not public service — need private networking for migration
+- no native integration with aws services
+
+## Amazon App Flow
+
+***todo: diagram***
+
+- fully managed integration service
+- exchange data between connectors (applications) using flows
+- sync data across apps, aggregate from various sources — avoid data silos
+    - e.g., sync contact records from salesforce to redshift
+    - e.g., support tickets from zendesk to s3
