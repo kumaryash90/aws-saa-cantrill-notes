@@ -23,8 +23,8 @@ These are **my own summaries** of what I found worth retaining — not comprehen
 | 9 | [RDS](notes/09-rds.md) | Done |
 | 10 | [Network Storage & Data Lifecycle](notes/10-network-storage.md) | Done |
 | 11 | [HA & Scaling](notes/11-ha-scaling.md) | Done |
-| 12 | [Serverless & Application Services](notes/12-serverless.md) | WIP |
-| 13 | [Global Content Delivery & Optimization](notes/13-global-content-delivery-and-optimization.md) | Done |
+| 12 | [Serverless & Application Services](notes/12-serverless.md) | Done |
+| 13 | [Global Content Delivery & Optimization](notes/13-global-content-delivery-and-optimization.md) | WIP |
 
 ---
 
