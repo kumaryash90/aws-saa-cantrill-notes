@@ -10,8 +10,6 @@
     - regional edge cache — larger version of edge location, provides another layer of caching
 - 1 or more **behaviors** sit between origin and distribution
 
-***todo: diagram***
-
 ## Cloudfront Behaviors
 
 - controls much of ttl, protocol and privacy settings
@@ -64,8 +62,6 @@
         - viewer protocol and origin protocol can differ
         - more granular config (custom ports etc., protocol etc.)
 
-***todo: diagram***
-
 ## CF Security — OAI and Custom Origins
 
 - origin access control
@@ -77,4 +73,34 @@
     - it's an actual identity, unlike oac
     - cf becomes that oai
 
-***todo: diagram***
+## Private Distribution and Behaviors
+
+- behavior can be public or private
+- 1 behavior ⇒ whole distribution is public or private
+- private content is delivered via signed URLs or cookies
+- trusted key groups → get signed cookies → access private content
+    - old way - cloudfront key and trusted signer
+    - with trusted key groups (new way) you don't need account root user to access public keys for this
+- signed URLs vs signed cookies
+    - signed url provides access to 1 object. was used when client doesn't support cookies
+    - cookies provides access to group of objects
+
+## Lambda@Edge
+
+- run lightweight lambda functions at edge locations
+- to modify traffic between viewer & edge, and edge & origin
+- runs in aws public zone
+- use cases
+    - A/B testing
+    - migration between s3 origins
+    - different objects based on device
+    - content by country
+
+## AWS Global Accelerator
+
+- optimize flow of data from users to aws infra
+- 2 anycast ip addresses
+    - anycast IPs allow a single ip to be in multiple locations, routing moves traffic to closest location/edge
+    - from the edge, traffic then moves via aws global network
+- it's a network product — works on tcp/udp/http(s), unlike cloudfront that's only http/s
+- doesn't cache anything. goal is to effectively **move the network closer to the user** (not content)
