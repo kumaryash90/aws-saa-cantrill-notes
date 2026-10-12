@@ -27,7 +27,8 @@ These are **my own summaries** of what I found worth retaining — not comprehen
 | 13 | [Global Content Delivery & Optimization](notes/13-global-content-delivery-and-optimization.md) | Done |
 | 14 | [Advanced VPC Networking](notes/14-advanced-vpc-networking.md) | Done |
 | 15 | [Hybrid Environments and Migration](notes/15-hybrid-environments-and-migration.md) | Done |
-| 16 | [Security, Deployment, & Operations](notes/16-security-deployment-and-operations.md) | WIP |
+| 16 | [Security, Deployment, & Operations](notes/16-security-deployment-and-operations.md) | Done |
+| 17 | [IaC — CloudFormation](notes/17-iac-cloudformation.md) | WIP |
 
 ---
 
