@@ -178,3 +178,74 @@
     - enable AWS Config across a large range of accounts
     - create IAM roles for cross-account access
     - AWS Config rules — MFA, EIPs, EBS encryption
+
+## CFN Deletion Policy
+
+- by default, the physical resource is deleted when the logical resource is deleted
+- but, can optionally retain the resource or take a snapshot (if applicable)
+- deletion policy doesn't apply in cases where the resource is replaced
+
+## CFN Stack Roles
+
+***todo: diagram — stack role assumption flow***
+
+- by default CFN uses the permissions of the identity that's creating the stack
+- but, roles can be configured for CFN to assume (for role separation etc):
+- admin creates the role → gives it to a non-admin user → this user can't assume the role, can only pass it to CFN → CFN assumes the role and creates the stack
+
+## CFN Init
+
+- provides config info to resources (desired state config management)
+- e.g.
+
+    ```yaml
+    ...
+    MyInstance:
+        Type: AWS::EC2::Instance
+        Metadata:
+            AWS::CloudFormation::Init:
+                configSets: ...
+                <config_key>:
+                    packages: ...
+                    groups: ...
+                    users: ...
+                    sources: ...
+                    files: ...
+                    commands: ...
+                    services: ...
+                <config_key>: ...
+                ...
+        UserData:
+            Fn::Base64: !Sub |
+                #!/bin/bash -xe
+                yum -y update
+                /opt/aws/bin/cfn-init -v --stack ${AWS::StackId} --resource MyInstance --region ${AWS::Region} --configsets <config_set>
+                /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource MyInstance --region ${AWS::Region}
+    ```
+
+- there can be multiple config keys — these are containers of config directives, containing the same sections as above
+- the configSets section contains which config keys to use and in what order
+
+## CFN cfn-hup
+
+***todo: diagram — cfn-hup change detection loop***
+
+- a helper daemon, needs to be installed
+- detects changes in resource metadata, and runs config actions if changes are there (unlike cfn-init, which runs only once, during bootstrapping)
+
+## CFN ChangeSets
+
+- allows review of changes before applying
+- multiple changesets can be created
+- execute a changeset when satisfied with the changes
+
+## CFN Custom Resources
+
+***todo: diagram — custom resource / Lambda event flow***
+
+- CFN doesn't always support everything in AWS (there's either a lag, or no support ever)
+- hence, custom resources for everything that's not supported natively by CFN
+- e.g.
+    - populate S3 with objects when created, or empty the bucket before delete
+    - request config from an external system when setting up an EC2 instance
+- done using Lambda etc — passing event data to Lambda to do custom stuff
