@@ -31,6 +31,7 @@ These are **my own summaries** of what I found worth retaining — not comprehen
 | 17 | [IaC — CloudFormation](notes/17-iac-cloudformation.md) | Done |
 | 18 | [NoSQL and DynamoDB](notes/18-nosql-and-dynamodb.md) | Done |
 | 19 | [Machine Learning 101](notes/19-machine-learning-101.md) | Done |
+| 20 | [Other Services and Features](notes/20-other-services-and-features.md) | Done |
 
 ---
 
