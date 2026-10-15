@@ -29,6 +29,7 @@ These are **my own summaries** of what I found worth retaining — not comprehen
 | 15 | [Hybrid Environments and Migration](notes/15-hybrid-environments-and-migration.md) | Done |
 | 16 | [Security, Deployment, & Operations](notes/16-security-deployment-and-operations.md) | Done |
 | 17 | [IaC — CloudFormation](notes/17-iac-cloudformation.md) | Done |
+| 18 | [NoSQL and DynamoDB](notes/18-nosql-and-dynamodb.md) | Done |
 
 ---
 
