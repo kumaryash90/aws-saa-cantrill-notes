@@ -30,6 +30,7 @@ These are **my own summaries** of what I found worth retaining — not comprehen
 | 16 | [Security, Deployment, & Operations](notes/16-security-deployment-and-operations.md) | Done |
 | 17 | [IaC — CloudFormation](notes/17-iac-cloudformation.md) | Done |
 | 18 | [NoSQL and DynamoDB](notes/18-nosql-and-dynamodb.md) | Done |
+| 19 | [Machine Learning 101](notes/19-machine-learning-101.md) | Done |
 
 ---
 
